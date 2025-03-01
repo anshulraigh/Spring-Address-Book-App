@@ -2,44 +2,45 @@ package com.bridgelabz.address_book_app.controller;
 
 import com.bridgelabz.address_book_app.dto.AddressBookDTO;
 import com.bridgelabz.address_book_app.model.AddressBookModel;
+import com.bridgelabz.address_book_app.service.AddressBookService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/addressbook")
 public class AddressBookController {
 
-    @GetMapping("/message")
-    public ResponseEntity<String> getMessage() {
-        return ResponseEntity.ok("GET Request Received");
-    }
+    private final AddressBookService addressBookService;
 
-    @GetMapping("/message/{id}")
-    public ResponseEntity<String> getMessageById(@PathVariable int id) {
-        return ResponseEntity.ok("GET Request Received for ID: " + id);
-    }
-
-    @PostMapping("/message")
-    public ResponseEntity<String> createMessage() {
-        return ResponseEntity.ok("POST Request Received");
-    }
-
-    @PutMapping("/message/{id}")
-    public ResponseEntity<String> updateMessage(@PathVariable int id) {
-        return ResponseEntity.ok("PUT Request Received for ID: " + id);
-    }
-
-    @DeleteMapping("/message/{id}")
-    public ResponseEntity<String> deleteMessage(@PathVariable int id) {
-        return ResponseEntity.ok("DELETE Request Received for ID: " + id);
+    public AddressBookController(AddressBookService addressBookService) {
+        this.addressBookService = addressBookService;
     }
 
     @PostMapping("/add")
     public ResponseEntity<AddressBookModel> addEntry(@RequestBody AddressBookDTO dto) {
-        AddressBookModel model = new AddressBookModel();
-        model.setId(1);
-        model.setName(dto.getName());
-        model.setAddress(dto.getAddress());
-        return ResponseEntity.ok(model);
+        return ResponseEntity.ok(addressBookService.addEntry(dto));
+    }
+
+    @GetMapping("/entries")
+    public ResponseEntity<List<AddressBookModel>> getAllEntries() {
+        return ResponseEntity.ok(addressBookService.getAllEntries());
+    }
+
+    @GetMapping("/entries/{id}")
+    public ResponseEntity<AddressBookModel> getEntryById(@PathVariable int id) {
+        return ResponseEntity.ok(addressBookService.getEntryById(id));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AddressBookModel> updateEntry(@PathVariable int id, @RequestBody AddressBookDTO dto) {
+        return ResponseEntity.ok(addressBookService.updateEntry(id, dto));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteEntry(@PathVariable int id) {
+        addressBookService.deleteEntry(id);
+        return ResponseEntity.ok("Entry with ID: " + id + " deleted successfully");
     }
 }
