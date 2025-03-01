@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/addressbook")
@@ -23,24 +24,23 @@ public class AddressBookController {
         return ResponseEntity.ok(addressBookService.addEntry(dto));
     }
 
-    @GetMapping("/entries")
+    @GetMapping("/all")
     public ResponseEntity<List<AddressBookModel>> getAllEntries() {
         return ResponseEntity.ok(addressBookService.getAllEntries());
     }
 
-    @GetMapping("/entries/{id}")
-    public ResponseEntity<AddressBookModel> getEntryById(@PathVariable int id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<AddressBookModel>> getEntryById(@PathVariable int id) {
         return ResponseEntity.ok(addressBookService.getEntryById(id));
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<AddressBookModel> updateEntry(@PathVariable int id, @RequestBody AddressBookDTO dto) {
         return ResponseEntity.ok(addressBookService.updateEntry(id, dto));
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteEntry(@PathVariable int id) {
-        addressBookService.deleteEntry(id);
-        return ResponseEntity.ok("Entry with ID: " + id + " deleted successfully");
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteEntry(@PathVariable int id) {
+        return ResponseEntity.ok(addressBookService.deleteEntry(id));
     }
 }

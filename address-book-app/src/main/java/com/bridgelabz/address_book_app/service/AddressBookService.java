@@ -27,25 +27,22 @@ public class AddressBookService {
         return addressBookList;
     }
 
-    public AddressBookModel getEntryById(int id) {
-        Optional<AddressBookModel> entry = addressBookList.stream()
-                .filter(model -> model.getId() == id)
-                .findFirst();
-        return entry.orElse(null);
+    public Optional<AddressBookModel> getEntryById(int id) {
+        return addressBookList.stream().filter(entry -> entry.getId() == id).findFirst();
     }
 
     public AddressBookModel updateEntry(int id, AddressBookDTO dto) {
-        for (AddressBookModel model : addressBookList) {
-            if (model.getId() == id) {
-                model.setName(dto.getName());
-                model.setAddress(dto.getAddress());
-                return model;
+        for (AddressBookModel entry : addressBookList) {
+            if (entry.getId() == id) {
+                entry.setName(dto.getName());
+                entry.setAddress(dto.getAddress());
+                return entry;
             }
         }
         return null;
     }
 
-    public void deleteEntry(int id) {
-        addressBookList.removeIf(model -> model.getId() == id);
+    public boolean deleteEntry(int id) {
+        return addressBookList.removeIf(entry -> entry.getId() == id);
     }
 }
