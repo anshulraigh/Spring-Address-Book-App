@@ -6,4 +6,8 @@ import lombok.Data;
 public class AddressBookDTO {
     private String name;
     private String address;
+    private String city;
+    private String state;
+    private String zipcode;
+    private String phoneNumber;
 }

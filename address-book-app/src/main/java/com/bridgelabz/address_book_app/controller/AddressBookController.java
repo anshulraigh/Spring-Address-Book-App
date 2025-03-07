@@ -11,6 +11,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/addressbook")
+@CrossOrigin(origins = "http://localhost:4200")  // Allow Angular frontend to access backend
 public class AddressBookController {
 
     private final AddressBookService addressBookService;
